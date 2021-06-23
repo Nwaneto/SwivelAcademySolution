@@ -4,5 +4,48 @@
         <name>SwivelAcademyAPI</name>
     </assembly>
     <members>
+        <member name="M:SwivelAcademyAPI.Controllers.StudentController.CreateCourse(SwivelAcademyAPI.Models.StudentModelDto)">
+            <summary>
+            End point to Create a Student Profile
+            </summary>
+            <param name="studModel"></param>
+            <returns>"Successfully Created" if successful</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.CreateCourse(SwivelAcademyAPI.Models.DTOs.CourseModelDto)">
+            <summary>
+            End point to create a Course
+            </summary>
+            <param name="cModel"></param>
+            <returns>"Successfully Created" if successful</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.updateCourse(System.Int32,SwivelAcademyAPI.Models.DTOs.CourseModelDto)">
+            <summary>
+            End point to Update a Course
+            </summary>
+            <param name="courseId"></param>
+            <param name="courseDto"></param>
+            <returns>"Updated Successfully" if update was successful</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.GetCourseById(System.Int32)">
+            <summary>
+            End point to Get a Course by courseId
+            </summary>
+            <param name="courseId"></param>
+            <returns>A course object</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.GetAllCourses">
+            <summary>
+            End point to Get all Courses
+            </summary>
+            <param></param>
+            <returns>A List of course objects</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.DeleteCourseById(System.Int32)">
+            <summary>
+            End point to Delete a Course
+            </summary>
+            <param name="courseId"></param>
+            <returns>Successfully deleted</returns>
+        </member>
     </members>
 </doc>

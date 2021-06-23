@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SwivelAcademyAPI.Models;
+using SwivelAcademyAPI.Models.DTOs;
+using SwivelAcademyAPI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,40 +14,155 @@ using System.Threading.Tasks;
 
 namespace SwivelAcademyAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/Teacher")]
     [ApiController]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class TeacherController : ControllerBase
     {
-        // GET: api/<Teacher>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        public static IWebHostEnvironment _environment;
+        private readonly ITRepository _tRepository;
+        private readonly IMapper _mapper;
+        private static IHttpContextAccessor _httpConAccessor;
+
+        public TeacherController(ITRepository tRepository,
+            IMapper mapper, IWebHostEnvironment environment, IHttpContextAccessor httpConAccessor)
         {
-            return new string[] { "value1", "value2" };
+            _tRepository = tRepository;
+            _mapper = mapper;
+            _environment = environment;
+            _httpConAccessor = httpConAccessor;
         }
 
-        // GET api/<Teacher>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+
+        #region End point to Create a Course
+
+        /// <summary>
+        /// End point to create a Course
+        /// </summary>
+        /// <param name="cModel"></param>
+        /// <returns>"Successfully Created" if successful</returns>
+        [HttpPost("CreateCourse")]
+        [ProducesResponseType(201, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult CreateCourse(CourseModelDto cModel)
         {
-            return "value";
+            if (cModel == null)
+            {
+                return BadRequest(ModelState);
+            }
+            var courseObj = _mapper.Map<CourseModel>(cModel);
+
+            if (_tRepository.CreateCourse(courseObj) == "Successfully Created")
+            {
+                return Created("api/v{version:apiVersion}/Teacher/CreateCourse", "Successful");
+            }
+            else
+            {
+                ModelState.AddModelError("", $"Something went wrong when saving the record for {cModel.CourseName}, check the value of your inputs properly and try again.");
+                return StatusCode(500, ModelState);
+            }
+
         }
 
-        // POST api/<Teacher>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        #endregion End point to create a Course
+
+        #region End point to Update a Course
+        /// <summary>
+        /// End point to Update a Course
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="courseDto"></param>
+        /// <returns>"Updated Successfully" if update was successful</returns>
+        [HttpPatch("UpdateCourse/{courseId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult updateCourse(int courseId, CourseModelDto courseDto)
         {
+            if (courseDto == null || courseId < 1)
+            {
+                return BadRequest(ModelState);
+            }
+            if (_tRepository.UpdateCourse(courseId, courseDto) != "Updated Successfully")
+            {
+                ModelState.AddModelError("", $"Something went wrong when updating the record for {courseDto.CourseName}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Updated Successfully");
+        }
+        #endregion End point to Update a Course
+
+        #region End point to Get a Course by courseId
+
+        /// <summary>
+        /// End point to Get a Course by courseId
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns>A course object</returns>
+        [HttpGet("Course/{courseId:int}")]
+        [ProducesResponseType(200, Type = typeof(CourseModel))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetCourseById(int courseId)
+        {
+            var courseObj = _tRepository.GetCourseByCourseId(courseId);
+            if (courseObj == null)
+            {
+                return NotFound();
+            }
+            return Ok(courseObj);
         }
 
-        // PUT api/<Teacher>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        #endregion End point to Get a Course by courseId
+
+        #region End point to Get all Courses
+
+        /// <summary>
+        /// End point to Get all Courses
+        /// </summary>
+        /// <param></param>
+        /// <returns>A List of course objects</returns>
+        [HttpGet("Courses")]
+        [ProducesResponseType(200, Type = typeof(CourseModel))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetAllCourses()
         {
+            var courseObj = _tRepository.GetAllCourses();
+            if (courseObj == null)
+            {
+                return NotFound();
+            }
+            return Ok(courseObj);
+        }
+        #endregion End point to Get all Courses
+
+        #region End point to Delete a Course
+
+        /// <summary>
+        /// End point to Delete a Course
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns>Successfully deleted</returns>
+        [HttpGet("DeleteCourse/{courseId:int}")]
+        [ProducesResponseType(200, Type = typeof(string))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult DeleteCourseById(int courseId)
+        {
+            var courseObj = _tRepository.DeleteCourse(courseId);
+            if (courseObj == null)
+            {
+                return NotFound();
+            }
+            return Ok(courseObj);
         }
 
-        // DELETE api/<Teacher>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        #endregion End point to Get a Course by courseId
+
+
     }
 }
