@@ -10,5 +10,9 @@ namespace SwivelAcademyAPI.Services
     public interface ISRepository
     {
         string CreateProfile(StudentModel studentObj);
+        string UpdateStudent(int studentId, StudentModelDto studentDto);
+        StudentModel GetStudentByCourseId(int studentId);
+        List<StudentModel> GetAllStudents();
+        string DeleteStudent(int studentId);
     }
 }

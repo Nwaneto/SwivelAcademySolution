@@ -9,6 +9,11 @@ namespace SwivelAcademyAPI.Services
 {
     public class TRepository : ITRepository
     {
+        public string AddTeacher(TeacherModelDto teacherObj)
+        {
+            throw new NotImplementedException();
+        }
+
         public string CreateCourse(CourseModel courseObj)
         {
             throw new NotImplementedException();
@@ -19,7 +24,17 @@ namespace SwivelAcademyAPI.Services
             throw new NotImplementedException();
         }
 
+        public string DeleteTeacher(int teacherId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<CourseModel>> GetAllCourses()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<TeacherModel> GetAllTeachers()
         {
             throw new NotImplementedException();
         }
@@ -29,7 +44,17 @@ namespace SwivelAcademyAPI.Services
             throw new NotImplementedException();
         }
 
+        public TeacherModel GetTeacherById(int teacherId)
+        {
+            throw new NotImplementedException();
+        }
+
         public string UpdateCourse(int courseId, CourseModelDto courseDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string UpdateTeacher(int teacherId, TeacherModelDto teacherDto)
         {
             throw new NotImplementedException();
         }

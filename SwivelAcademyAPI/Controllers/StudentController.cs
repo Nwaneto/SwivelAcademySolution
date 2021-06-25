@@ -44,7 +44,7 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CreateCourse(StudentModelDto studModel)
+        public IActionResult CreateStudent(StudentModelDto studModel)
         {
             if (studModel == null)
             {
@@ -65,5 +65,100 @@ namespace SwivelAcademyAPI.Controllers
         }
 
         #endregion End point to Create a Student Profile
+
+        #region End point to Update a Student record
+        /// <summary>
+        /// End point to Update a Student record
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <param name="studentDto"></param>
+        /// <returns>"Updated Successfully" if update was successful</returns>
+        [HttpPatch("UpdateStudent/{studentId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult updateStudent(int studentId, StudentModelDto studentDto)
+        {
+            if (studentDto == null || studentId < 1)
+            {
+                return BadRequest(ModelState);
+            }
+            if (_sRepository.UpdateStudent(studentId, studentDto) != "Updated Successfully")
+            {
+                ModelState.AddModelError("", $"Something went wrong when updating the record for {studentDto.FirstName}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Updated Successfully");
+        }
+        #endregion End point to Update a Student record
+
+        #region End point to Get a Student
+
+        /// <summary>
+        /// End point to Get a Student
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <returns>A student object</returns>
+        [HttpGet("Student/{studentId:int}")]
+        [ProducesResponseType(200, Type = typeof(StudentModel))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetStudentById(int studentId)
+        {
+            var studentObj = _sRepository.GetStudentByCourseId(studentId);
+            if (studentObj == null)
+            {
+                return NotFound();
+            }
+            return Ok(studentObj);
+        }
+
+        #endregion End point to Get a Student
+
+        #region End point to Get all Students
+
+        /// <summary>
+        /// End point to Get all Students
+        /// </summary>
+        /// <param></param>
+        /// <returns>A List of students</returns>
+        [HttpGet("Students")]
+        [ProducesResponseType(200, Type = typeof(StudentModel))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetAllStudents()
+        {
+            var studentObj = _sRepository.GetAllStudents();
+            if (studentObj == null)
+            {
+                return NotFound();
+            }
+            return Ok(studentObj);
+        }
+        #endregion End point to Get all Students
+
+        #region End point to Delete a Student
+
+        /// <summary>
+        /// End point to Delete a Student
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <returns>Successful</returns>
+        [HttpDelete("DeleteStudent/{studentId:int}")]
+        [ProducesResponseType(200, Type = typeof(string))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult DeleteStudentById(int studentId)
+        {
+            var result = _sRepository.DeleteStudent(studentId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+
+        #endregion End point to Delete a Student
     }
 }

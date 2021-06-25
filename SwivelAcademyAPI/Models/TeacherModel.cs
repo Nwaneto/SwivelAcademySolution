@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace SwivelAcademyAPI.Models
 {
-    public class StudentModel
+    public class TeacherModel
     {
-        public int StudentId { get; set; }
+        public int TeacherId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Address { get; set; }

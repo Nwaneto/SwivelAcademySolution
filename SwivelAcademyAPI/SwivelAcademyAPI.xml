@@ -4,12 +4,41 @@
         <name>SwivelAcademyAPI</name>
     </assembly>
     <members>
-        <member name="M:SwivelAcademyAPI.Controllers.StudentController.CreateCourse(SwivelAcademyAPI.Models.StudentModelDto)">
+        <member name="M:SwivelAcademyAPI.Controllers.StudentController.CreateStudent(SwivelAcademyAPI.Models.StudentModelDto)">
             <summary>
             End point to Create a Student Profile
             </summary>
             <param name="studModel"></param>
             <returns>"Successfully Created" if successful</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.StudentController.updateStudent(System.Int32,SwivelAcademyAPI.Models.StudentModelDto)">
+            <summary>
+            End point to Update a Student record
+            </summary>
+            <param name="studentId"></param>
+            <param name="studentDto"></param>
+            <returns>"Updated Successfully" if update was successful</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.StudentController.GetStudentById(System.Int32)">
+            <summary>
+            End point to Get a Student
+            </summary>
+            <param name="studentId"></param>
+            <returns>A student object</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.StudentController.GetAllStudents">
+            <summary>
+            End point to Get all Students
+            </summary>
+            <param></param>
+            <returns>A List of students</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.StudentController.DeleteStudentById(System.Int32)">
+            <summary>
+            End point to Delete a Student
+            </summary>
+            <param name="studentId"></param>
+            <returns>Successful</returns>
         </member>
         <member name="M:SwivelAcademyAPI.Controllers.TeacherController.CreateCourse(SwivelAcademyAPI.Models.DTOs.CourseModelDto)">
             <summary>
@@ -46,6 +75,42 @@
             </summary>
             <param name="courseId"></param>
             <returns>Successfully deleted</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.AddTeacher(SwivelAcademyAPI.Models.TeacherModelDto)">
+            <summary>
+            End point to Create a Teacher record
+            </summary>
+            <param name="tModel"></param>
+            <returns>"Successfully Created" if successful</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.UpdateTeacher(System.Int32,SwivelAcademyAPI.Models.TeacherModelDto)">
+            <summary>
+            End point to Update a Teacher record
+            </summary>
+            <param name="teacherId"></param>
+            <param name="teacherDto"></param>
+            <returns>"Updated Successfully" if update was successful</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.GetTeacherById(System.Int32)">
+            <summary>
+            End point to Get a Teacher by teacherId
+            </summary>
+            <param name="teacherId"></param>
+            <returns>A course object</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.GetAllTeachers">
+            <summary>
+            End point to Get all Teachers
+            </summary>
+            <param></param>
+            <returns>A List of Teacher objects</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.DeleteTeacherById(System.Int32)">
+            <summary>
+            End point to Delete a Teacher Record
+            </summary>
+            <param name="teacherId"></param>
+            <returns>Successful</returns>
         </member>
     </members>
 </doc>

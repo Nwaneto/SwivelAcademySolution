@@ -147,7 +147,7 @@ namespace SwivelAcademyAPI.Controllers
         /// </summary>
         /// <param name="courseId"></param>
         /// <returns>Successfully deleted</returns>
-        [HttpGet("DeleteCourse/{courseId:int}")]
+        [HttpDelete("DeleteCourse/{courseId:int}")]
         [ProducesResponseType(200, Type = typeof(string))]
         [ProducesResponseType(404)]
         [ProducesDefaultResponseType]
@@ -164,5 +164,133 @@ namespace SwivelAcademyAPI.Controllers
         #endregion End point to Get a Course by courseId
 
 
+
+        #region End point to Create a Teacher record
+
+        /// <summary>
+        /// End point to Create a Teacher record
+        /// </summary>
+        /// <param name="tModel"></param>
+        /// <returns>"Successfully Created" if successful</returns>
+        [HttpPost("AddTeacher")]
+        [ProducesResponseType(201, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult AddTeacher(TeacherModelDto tModel)
+        {
+            if (tModel == null)
+            {
+                return BadRequest(ModelState);
+            }
+            var teacherObj = _mapper.Map<TeacherModelDto>(tModel);
+
+            if (_tRepository.AddTeacher(teacherObj) == "Successfully Created")
+            {
+                return Created("api/v{version:apiVersion}/Teacher/AddTeacher", "Successful");
+            }
+            else
+            {
+                ModelState.AddModelError("", $"Something went wrong when saving the record for {tModel.FirstName}, check the value of your inputs properly and try again.");
+                return StatusCode(500, ModelState);
+            }
+        }
+
+        #endregion End point to Create a Teacher record
+
+        #region End point to Update a Teacher record
+        /// <summary>
+        /// End point to Update a Teacher record
+        /// </summary>
+        /// <param name="teacherId"></param>
+        /// <param name="teacherDto"></param>
+        /// <returns>"Updated Successfully" if update was successful</returns>
+        [HttpPatch("UpdateTeacher/{teacherId:int}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateTeacher(int teacherId, TeacherModelDto teacherDto)
+        {
+            if (teacherDto == null || teacherId < 1)
+            {
+                return BadRequest(ModelState);
+            }
+            if (_tRepository.UpdateTeacher(teacherId, teacherDto) != "Updated Successfully")
+            {
+                ModelState.AddModelError("", $"Something went wrong when updating the record for {teacherDto.FirstName}");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Updated Successfully");
+        }
+        #endregion End point to Update a Teacher record
+
+        #region End point to Get a Teacher by teacherId
+
+        /// <summary>
+        /// End point to Get a Teacher by teacherId
+        /// </summary>
+        /// <param name="teacherId"></param>
+        /// <returns>A course object</returns>
+        [HttpGet("Teacher/{teacherId:int}")]
+        [ProducesResponseType(200, Type = typeof(TeacherModel))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetTeacherById(int teacherId)
+        {
+            var teacherObj = _tRepository.GetTeacherById(teacherId);
+            if (teacherObj == null)
+            {
+                return NotFound();
+            }
+            return Ok(teacherObj);
+        }
+
+        #endregion End point to Get a Teacher by teacherId
+
+        #region End point to Get all Teachers
+
+        /// <summary>
+        /// End point to Get all Teachers
+        /// </summary>
+        /// <param></param>
+        /// <returns>A List of Teacher objects</returns>
+        [HttpGet("Teachers")]
+        [ProducesResponseType(200, Type = typeof(TeacherModel))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetAllTeachers()
+        {
+            var teacherObj = _tRepository.GetAllTeachers();
+            if (teacherObj == null)
+            {
+                return NotFound();
+            }
+            return Ok(teacherObj);
+        }
+        #endregion End point to Get all Teachers
+
+        #region End point to Delete a Teacher Record
+
+        /// <summary>
+        /// End point to Delete a Teacher Record
+        /// </summary>
+        /// <param name="teacherId"></param>
+        /// <returns>Successful</returns>
+        [HttpDelete("DeleteTeacher/{teacherId:int}")]
+        [ProducesResponseType(200, Type = typeof(string))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public IActionResult DeleteTeacherById(int teacherId)
+        {
+            var result = _tRepository.DeleteTeacher(teacherId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+
+        #endregion End point to Delete a Teacher Record
     }
 }

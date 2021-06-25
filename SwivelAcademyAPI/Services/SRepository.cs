@@ -13,5 +13,25 @@ namespace SwivelAcademyAPI.Services
         {
             throw new NotImplementedException();
         }
+
+        public string DeleteStudent(int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<StudentModel> GetAllStudents()
+        {
+            throw new NotImplementedException();
+        }
+
+        public StudentModel GetStudentByCourseId(int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string UpdateStudent(int studentId, StudentModelDto studentDto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
