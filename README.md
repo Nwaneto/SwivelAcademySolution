@@ -1,5 +1,5 @@
 # Swivel Academy Solution
->*Thanks for the opportunity to work on this project, although i could not complete every part ofthe project due to other commitments with my full-time job, 
+>*Thanks for the opportunity to work on this project, although i could not complete every part of the project due to other commitments with my full-time job, 
 but, i'm really glad to have worked on this within this short period.*
 
 This solution contains three projects namely
