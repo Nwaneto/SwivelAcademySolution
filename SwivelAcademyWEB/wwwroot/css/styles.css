@@ -1,0 +1,59 @@
+﻿.navbar {
+    padding: 0rem 2rem;
+    box-shadow: 0 0 1px;
+}
+
+.navbar-brand {
+    padding-top: 0rem;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #00008f;
+    font-weight: bold;
+}
+
+@media (min-width: 768px) {
+    body:not(.sidebar-mini-md) .content-wrapper,
+    body:not(.sidebar-mini-md) .main-footer,
+    body:not(.sidebar-mini-md) .main-header {
+        transition: none;
+        margin-left: 0px;
+    }
+}
+
+.rrs-input {
+    border-radius: 0px;
+}
+.well {
+    margin-top: 4%;
+    margin-bottom: 4%;
+    background-color: white;
+}
+
+.form-legend {
+    padding-bottom: 2em;
+}
+
+.form-control {
+    border-radius: 0rem;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.text-style {
+    color: #F07662;
+    font-size: 15px;
+}
+.dashbCard {
+    box-shadow: 0 0 3px;
+    padding: 1% 1%;
+    border-radius: 0px;
+    margin-bottom: 0.5rem;
+}
+
+.search-form {
+    box-shadow: 0 0 3px;
+    padding: 0%;
+}

@@ -17,7 +17,7 @@ namespace SwivelAcademyAPI.Services
         string AddTeacher(TeacherModelDto teacherObj);
         string UpdateTeacher(int teacherId, TeacherModelDto teacherDto);
         TeacherModel GetTeacherById(int teacherId);
-        List<TeacherModel> GetAllTeachers();
+        Task<List<TeacherModel>> GetAllTeachers();
         string DeleteTeacher(int teacherId);
     }
 }

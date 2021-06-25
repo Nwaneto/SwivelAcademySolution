@@ -12,7 +12,7 @@ namespace SwivelAcademyAPI.Services
         string CreateProfile(StudentModel studentObj);
         string UpdateStudent(int studentId, StudentModelDto studentDto);
         StudentModel GetStudentByCourseId(int studentId);
-        List<StudentModel> GetAllStudents();
+        Task<List<StudentModel>> GetAllStudents();
         string DeleteStudent(int studentId);
     }
 }

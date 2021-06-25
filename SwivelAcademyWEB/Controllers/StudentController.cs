@@ -29,5 +29,21 @@ namespace SwivelAcademyWEB.Controllers
         {
             return View();
         }
+        public IActionResult RegisterForCourse()
+        {
+            return View();
+        }
+        public IActionResult RegisterProfile()
+        {
+            return View();
+        }
+        public IActionResult UpdateProfile()
+        {
+            return View();
+        }
+        public IActionResult ViewProfile()
+        {
+            return View();
+        }
     }
 }

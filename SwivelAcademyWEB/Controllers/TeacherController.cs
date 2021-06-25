@@ -41,6 +41,19 @@ namespace SwivelAcademyWEB.Controllers
         [HttpPost]
         public IActionResult Profile(TeacherModel teacherModel)
         {
+            //
+            return View();
+        }
+        public IActionResult TeachCourse()
+        {
+            return View();
+        }
+        public IActionResult ViewProfile()
+        {
+            return View();
+        }
+        public IActionResult ViewMyCourses()
+        {
             return View();
         }
     }

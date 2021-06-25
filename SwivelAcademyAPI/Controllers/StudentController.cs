@@ -127,9 +127,9 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesResponseType(200, Type = typeof(StudentModel))]
         [ProducesResponseType(404)]
         [ProducesDefaultResponseType]
-        public IActionResult GetAllStudents()
+        public async Task<IActionResult> GetAllStudents()
         {
-            var studentObj = _sRepository.GetAllStudents();
+            var studentObj = await _sRepository.GetAllStudents();
             if (studentObj == null)
             {
                 return NotFound();
