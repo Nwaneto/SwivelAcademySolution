@@ -51,7 +51,7 @@ namespace SwivelAcademyAPI.Services
             }
         }
 
-        public string CreateCourse(CourseModel courseObj)
+        public string CreateCourse(CourseModelDto courseObj)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace SwivelAcademyAPI.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<CourseModel>> GetAllCourses()
+        public async Task<IEnumerable<CourseModel>> GetAllCourses()
         {
             try
             {
@@ -111,12 +111,50 @@ namespace SwivelAcademyAPI.Services
                             {
                                 CourseModel cmDto = new CourseModel
                                 {
-                                    
                                     CourseId = Convert.ToInt32(reader["CourseID"]),
                                     CourseName = reader["CourseTitle"].ToString(),
                                     CourseSyllabus = reader["CourseSyllable"].ToString()
                                 }; 
                                 response.Add(cmDto);
+                            }
+                        }
+                        await con.CloseAsync();
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public async Task<List<TaughtCourses>> GetAllTaughtCoursesByTeacher(int teacherId)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("STP_GetAllCoursesTaughtByTeacher", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@TeacherId", teacherId);
+
+                        var response = new List<TaughtCourses>();
+                        await con.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                TaughtCourses rcDto = new TaughtCourses
+                                {
+                                    CourseID = Convert.ToInt32(reader["CourseID"]),
+                                    CourseTitle = reader["CourseTitle"].ToString(),
+                                    CourseSyllable = reader["CourseSyllable"].ToString()
+                                };
+                                response.Add(rcDto);
                             }
                         }
                         await con.CloseAsync();
@@ -172,12 +210,111 @@ namespace SwivelAcademyAPI.Services
 
         public CourseModel GetCourseByCourseId(int courseId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                CourseModel returnVal = new CourseModel();
+                using (SqlConnection con = new SqlConnection(_connString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("STP_GetCourse", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandTimeout = 12000;
+
+                        cmd.Parameters.AddWithValue("@CourseId", courseId);
+
+                        con.Open();
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                returnVal.CourseId = Convert.ToInt32(reader["TeCourseIDacherID"]);
+                                returnVal.CourseName = reader["CourseTitle"].ToString();
+                                returnVal.CourseSyllabus = reader["CourseSyllable"].ToString();
+                            }
+                        }
+                        con.Close();
+                        return returnVal;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public TeacherModel GetTeacherById(int teacherId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                TeacherModel returnVal = new TeacherModel();
+                using (SqlConnection con = new SqlConnection(_connString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("STP_GetTeacher", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandTimeout = 12000;
+
+                        cmd.Parameters.AddWithValue("@TeacherId", teacherId);
+
+                        con.Open();
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                returnVal.TeacherId = Convert.ToInt32(reader["TeacherID"]);
+                                returnVal.FirstName = reader["FirstName"].ToString();
+                                returnVal.LastName = reader["LastName"].ToString();
+                                returnVal.Address = reader["Address"].ToString();
+                                returnVal.Gender = reader["Gender"].ToString();
+                            }
+                        }
+
+                        con.Close();
+                        return returnVal;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public string TeachCourse(TeachCourseModel teachCourse)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("STP_AssignTeacherToCourse", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@TeacherID", teachCourse.TeacherID);
+                        cmd.Parameters.AddWithValue("@CourseID", teachCourse.CourseID);
+                        string response = "";
+                        con.Open();
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                response = reader["Result"].ToString();
+                            }
+                        }
+                        con.Close();
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return "Failed";
+            }
         }
 
         public string UpdateCourse(int courseId, CourseModelDto courseDto)

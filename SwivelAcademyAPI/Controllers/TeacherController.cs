@@ -19,18 +19,12 @@ namespace SwivelAcademyAPI.Controllers
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class TeacherController : ControllerBase
     {
-        public static IWebHostEnvironment _environment;
         private readonly ITRepository _tRepository;
-        private readonly IMapper _mapper;
-        private static IHttpContextAccessor _httpConAccessor;
 
         public TeacherController(ITRepository tRepository,
             IMapper mapper, IWebHostEnvironment environment, IHttpContextAccessor httpConAccessor)
         {
             _tRepository = tRepository;
-            _mapper = mapper;
-            _environment = environment;
-            _httpConAccessor = httpConAccessor;
         }
 
 
@@ -48,13 +42,13 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult CreateCourse(CourseModelDto cModel)
         {
-            if (cModel == null)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var courseObj = _mapper.Map<CourseModel>(cModel);
+            //var courseObj = _mapper.Map<CourseModel>(cModel);
 
-            if (_tRepository.CreateCourse(courseObj) == "Successfully Created")
+            if (_tRepository.CreateCourse(cModel) == "Successfully Created")
             {
                 return Created("api/v{version:apiVersion}/Teacher/CreateCourse", "Successful");
             }
@@ -129,9 +123,9 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesResponseType(200, Type = typeof(CourseModel))]
         [ProducesResponseType(404)]
         [ProducesDefaultResponseType]
-        public IActionResult GetAllCourses()
+        public async Task<IActionResult> GetAllCourses()
         {
-            var courseObj = _tRepository.GetAllCourses();
+            var courseObj = await _tRepository.GetAllCourses();
             if (courseObj == null)
             {
                 return NotFound();
@@ -259,9 +253,9 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesResponseType(200, Type = typeof(TeacherModel))]
         [ProducesResponseType(404)]
         [ProducesDefaultResponseType]
-        public IActionResult GetAllTeachers()
+        public async Task<IActionResult> GetAllTeachers()
         {
-            var teacherObj = _tRepository.GetAllTeachers();
+            var teacherObj = await _tRepository.GetAllTeachers();
             if (teacherObj == null)
             {
                 return NotFound();
@@ -292,5 +286,60 @@ namespace SwivelAcademyAPI.Controllers
         }
 
         #endregion End point to Delete a Teacher Record
+
+        #region End point for Teacher to Register to take a course
+
+        /// <summary>
+        /// End point for Teacher to Register to take a course
+        /// </summary>
+        /// <param name="teachCourse"></param>
+        /// <returns>"Successfully Created" if successful</returns>
+        [HttpPost("TeachCourse")]
+        [ProducesResponseType(201, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult TeachCourse(TeachCourseModel teachCourse)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (_tRepository.TeachCourse(teachCourse) == "Successfully Created")
+            {
+                return Created("api/v{version:apiVersion}/Teacher/TeachCourse", "Successfully Created");
+            }
+            else
+            {
+                ModelState.AddModelError("", $"Something went wrong, check the value of your inputs properly and try again.");
+                return StatusCode(500, ModelState);
+            }
+
+        }
+
+        #endregion End point for Teacher to Register to take a course
+
+
+        #region End point to Get all Courses taught by a teacher
+
+        /// <summary>
+        /// End point to Get all Courses taught by a teacher
+        /// </summary>
+        /// <param name="teacherId"></param>
+        /// <returns>A List of Courses</returns>
+        [HttpGet("All-taughtcourses-by-teacher/{teacherId:int}")]
+        [ProducesResponseType(200, Type = typeof(TaughtCourses))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> GetAllTaughtCoursesByTeacher(int teacherId)
+        {
+            var courseObj = await _tRepository.GetAllTaughtCoursesByTeacher(teacherId);
+            if (courseObj == null)
+            {
+                return NotFound();
+            }
+            return Ok(courseObj);
+        }
+        #endregion End point to Get all Courses taught by a teacher
     }
 }

@@ -101,7 +101,7 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesDefaultResponseType]
         public ActionResult<StudentModel> GetStudentById(int studentId)
         {
-            var studentObj = _sRepository.GetStudentByCourseId(studentId);
+            var studentObj = _sRepository.GetStudentById(studentId);
             if (studentObj == null)
             {
                 return NotFound();
@@ -146,7 +146,7 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesDefaultResponseType]
         public IActionResult DeleteStudentById(int studentId)
         {
-            var studentObj = _sRepository.GetStudentByCourseId(studentId);
+            var studentObj = _sRepository.GetStudentById(studentId);
             if (studentObj == null)
             {
                 return NotFound();
@@ -160,5 +160,59 @@ namespace SwivelAcademyAPI.Controllers
         }
 
         #endregion End point to Delete a Student
+
+        #region End point to Register For a course
+
+        /// <summary>
+        /// End point to Register For a course
+        /// </summary>
+        /// <param name="regCourse"></param>
+        /// <returns>"Successfully Created" if successful</returns>
+        [HttpPost("RegisterCourse")]
+        [ProducesResponseType(201, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult RegisterCourse(RegisterCourseModel regCourse)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (_sRepository.RegisterCourse(regCourse) == "Successfully Created")
+            {
+                return Created("api/v{version:apiVersion}/Student/RegisterCourse", "Successfully Created");
+            }
+            else
+            {
+                ModelState.AddModelError("", $"Something went wrong, check the value of your inputs properly and try again.");
+                return StatusCode(500, ModelState);
+            }
+
+        }
+
+        #endregion End point to Register For a course
+
+        #region End point to Get all Courses registered by a Students
+
+        /// <summary>
+        /// End point to Get all Courses registered by a Students
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <returns>A List of Courses</returns>
+        [HttpGet("All-registered-courses/{studentId:int}")]
+        [ProducesResponseType(200, Type = typeof(RegCourses))]
+        [ProducesResponseType(404)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> GetAllCoursesByStudent(int studentId)
+        {
+            var courseObj = await _sRepository.GetAllCoursesByStudent(studentId);
+            if (courseObj == null)
+            {
+                return NotFound();
+            }
+            return Ok(courseObj);
+        }
+        #endregion End point to Get all Courses registered by a Students
     }
 }

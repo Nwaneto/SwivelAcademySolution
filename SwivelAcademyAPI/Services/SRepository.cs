@@ -51,6 +51,38 @@ namespace SwivelAcademyAPI.Services
             }
         }
 
+        public string RegisterCourse(RegisterCourseModel regCourse)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("STP_RegisterStudentToCourse", con))
+                    {                 
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@StudentID", regCourse.StudentId);
+                        cmd.Parameters.AddWithValue("@TeacherCourseID", regCourse.Teacher_CourseId);
+                        string response = "";
+                        con.Open();
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                response = reader["Result"].ToString();
+                            }
+                        }
+                        con.Close();
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return "Failed";
+            }
+        }
+
         public string DeleteStudent(int studentId)
         {
             try
@@ -126,9 +158,120 @@ namespace SwivelAcademyAPI.Services
             throw new NotImplementedException();
         }
 
+        public StudentModel GetStudentById(int studentId)
+        {
+            try
+            {
+                StudentModel returnVal = new StudentModel();
+                using (SqlConnection con = new SqlConnection(_connString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("STP_GetStudent", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandTimeout = 12000;
+
+                        cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+                        con.Open();
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {               
+                                returnVal.StudentId = Convert.ToInt32(reader["StudentID"]);
+                                returnVal.FirstName = reader["FirstName"].ToString();
+                                returnVal.LastName = reader["LastName"].ToString();
+                                returnVal.Address = reader["Address"].ToString();
+                                returnVal.Gender = reader["Gender"].ToString();
+                            }
+                        }
+
+                        con.Close();
+                        return returnVal;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public string UpdateStudent(int studentId, StudentModelDto studentDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("STP_UpdateStudent", con))
+                    {                
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@StudentId", studentId);
+                        cmd.Parameters.AddWithValue("@FirstName", studentDto.FirstName);
+                        cmd.Parameters.AddWithValue("@LastName", studentDto.LastName);
+                        cmd.Parameters.AddWithValue("@Address", studentDto.Address);
+                        cmd.Parameters.AddWithValue("@Gender", studentDto.Gender);
+                        string response = "";
+                        con.Open();
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                response = reader["Result"].ToString();
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Message.ToString();
+                return "Failed";
+            }
+        }
+
+        public async Task<List<RegCourses>> GetAllCoursesByStudent(int studentId)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("STP_GetAllCoursesRegByStudent", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@StudentId", studentId);
+
+                        var response = new List<RegCourses>();
+                        await con.OpenAsync();
+
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                RegCourses rcDto = new RegCourses
+                                {
+                                    CourseID = reader["CourseID"].ToString(),
+                                    CourseTitle = reader["CourseTitle"].ToString(),
+                                    CourseSyllable = reader["CourseSyllable"].ToString(),
+                                    TeacherName = reader["TeacherName"].ToString()                                    
+                                };
+                                response.Add(rcDto);
+                            }
+                        }
+                        await con.CloseAsync();
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

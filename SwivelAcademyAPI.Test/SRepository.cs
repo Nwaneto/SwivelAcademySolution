@@ -62,6 +62,11 @@ namespace SwivelAcademyAPI.Test
             return "Successful";
         }
 
+        public Task<List<RegCourses>> GetAllCoursesByStudent(int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<StudentModel>> GetAllStudents()
         {
             return await Task.FromResult(_sDto);
@@ -70,6 +75,16 @@ namespace SwivelAcademyAPI.Test
         public StudentModel GetStudentByCourseId(int studentId)
         {
             return _sDto.Where(a => a.StudentId == studentId).FirstOrDefault();
+        }
+
+        public StudentModel GetStudentById(int studentId)
+        {
+            return _sDto.Where(a => a.StudentId == studentId).FirstOrDefault();
+        }
+
+        public string RegisterCourse(RegisterCourseModel regCourse)
+        {
+            throw new NotImplementedException();
         }
 
         public string UpdateStudent(int studentId, StudentModelDto studentDto)

@@ -40,6 +40,20 @@
             <param name="studentId"></param>
             <returns>Successful</returns>
         </member>
+        <member name="M:SwivelAcademyAPI.Controllers.StudentController.RegisterCourse(SwivelAcademyAPI.Models.RegisterCourseModel)">
+            <summary>
+            End point to Register For a course
+            </summary>
+            <param name="regCourse"></param>
+            <returns>"Successfully Created" if successful</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.StudentController.GetAllCoursesByStudent(System.Int32)">
+            <summary>
+            End point to Get all Courses registered by a Students
+            </summary>
+            <param name="studentId"></param>
+            <returns>A List of Courses</returns>
+        </member>
         <member name="M:SwivelAcademyAPI.Controllers.TeacherController.CreateCourse(SwivelAcademyAPI.Models.DTOs.CourseModelDto)">
             <summary>
             End point to create a Course
@@ -111,6 +125,20 @@
             </summary>
             <param name="teacherId"></param>
             <returns>Successful</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.TeachCourse(SwivelAcademyAPI.Models.TeachCourseModel)">
+            <summary>
+            End point for Teacher to Register to take a course
+            </summary>
+            <param name="teachCourse"></param>
+            <returns>"Successfully Created" if successful</returns>
+        </member>
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.GetAllTaughtCoursesByTeacher(System.Int32)">
+            <summary>
+            End point to Get all Courses taught by a teacher
+            </summary>
+            <param name="teacherId"></param>
+            <returns>A List of Courses</returns>
         </member>
     </members>
 </doc>
