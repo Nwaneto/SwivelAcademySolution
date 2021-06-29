@@ -20,16 +20,10 @@ namespace SwivelAcademyAPI.Controllers
     {
         public static IWebHostEnvironment _environment;
         private readonly ISRepository _sRepository;
-        private readonly IMapper _mapper;
-        private static IHttpContextAccessor _httpConAccessor;
 
-        public StudentController(ISRepository sRepository,
-            IMapper mapper, IWebHostEnvironment environment, IHttpContextAccessor httpConAccessor)
+        public StudentController(ISRepository sRepository)
         {
             _sRepository = sRepository;
-            _mapper = mapper;
-            _environment = environment;
-            _httpConAccessor = httpConAccessor;
         }
 
         #region End point to Create a Student Profile
@@ -44,15 +38,16 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CreateStudent(StudentModelDto studModel)
+        public ActionResult CreateStudent(StudentModel studModel)
         {
-            if (studModel == null)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var studentObj = _mapper.Map<StudentModel>(studModel);
+            var sModel = new StudentModel();
+            //var studentObj = _mapper.Map<StudentModel>(studModel);
 
-            if (_sRepository.CreateProfile(studentObj) == "Successfully Created")
+            if (_sRepository.CreateStudent(studModel) == "Successfully Created")
             {
                 return Created("api/v{version:apiVersion}/Student/Profile", "Successful");
             }
@@ -104,7 +99,7 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesResponseType(200, Type = typeof(StudentModel))]
         [ProducesResponseType(404)]
         [ProducesDefaultResponseType]
-        public IActionResult GetStudentById(int studentId)
+        public ActionResult<StudentModel> GetStudentById(int studentId)
         {
             var studentObj = _sRepository.GetStudentByCourseId(studentId);
             if (studentObj == null)
@@ -151,12 +146,17 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesDefaultResponseType]
         public IActionResult DeleteStudentById(int studentId)
         {
-            var result = _sRepository.DeleteStudent(studentId);
-            if (result == null)
+            var studentObj = _sRepository.GetStudentByCourseId(studentId);
+            if (studentObj == null)
             {
                 return NotFound();
             }
-            return Ok(result);
+            else
+            {
+                var result = _sRepository.DeleteStudent(studentId);
+                return Ok(result);
+            }
+            
         }
 
         #endregion End point to Delete a Student

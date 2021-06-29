@@ -4,7 +4,7 @@
         <name>SwivelAcademyAPI</name>
     </assembly>
     <members>
-        <member name="M:SwivelAcademyAPI.Controllers.StudentController.CreateStudent(SwivelAcademyAPI.Models.StudentModelDto)">
+        <member name="M:SwivelAcademyAPI.Controllers.StudentController.CreateStudent(SwivelAcademyAPI.Models.StudentModel)">
             <summary>
             End point to Create a Student Profile
             </summary>

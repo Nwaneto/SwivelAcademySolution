@@ -17,7 +17,7 @@ namespace SwivelAcademyAPI.Services
         {
             _connString = configuration.GetConnectionString("SwivelAcademyConnString");
         }
-        public string CreateProfile(StudentModel studentObj)
+        public string CreateStudent(StudentModel studentObj)
         {
             try
             {
@@ -53,10 +53,37 @@ namespace SwivelAcademyAPI.Services
 
         public string DeleteStudent(int studentId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("STP_DeleteStudent", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@StudentId", studentId);
+                        string response = "";
+                        con.Open();
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                response = reader["Result"].ToString();
+                            }
+                        }
+
+                        return response;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Message.ToString();
+                return "Failed";
+            }
         }
 
-        public async Task<List<StudentModel>> GetAllStudents()
+        public async Task<IEnumerable<StudentModel>> GetAllStudents()
         {
             try
             {
