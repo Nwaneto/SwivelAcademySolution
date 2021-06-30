@@ -30,6 +30,6 @@ Student views all their registered courses (up to 3)
 ![Image of API](./TeacherDashboard.PNG)
 
 Teacher can take up to 3 courses
-![Image of API](./TeachCourse.PNG)
+![Image of API](./TeachCourse.png)
 
 Thank you.
