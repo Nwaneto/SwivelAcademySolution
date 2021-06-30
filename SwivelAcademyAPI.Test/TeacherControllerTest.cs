@@ -48,7 +48,7 @@ namespace SwivelAcademyAPI.Test
             var notFoundResult = _controller.GetTeacherById(200);
 
             // Assert
-            Assert.IsType<NotFoundResult>(notFoundResult);
+            Assert.IsType<NotFoundResult>(notFoundResult.Result);
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace SwivelAcademyAPI.Test
             var okResult = _controller.GetTeacherById(testId);
 
             // Assert
-            Assert.IsType<OkObjectResult>(okResult);
+            Assert.IsType<OkObjectResult>(okResult.Result);
 
         }
 
@@ -173,7 +173,7 @@ namespace SwivelAcademyAPI.Test
             var notFoundResult = _controller.GetCourseById(200);
 
             // Assert
-            Assert.IsType<NotFoundResult>(notFoundResult);
+            Assert.IsType<NotFoundResult>(notFoundResult.Result);
         }
 
         [Fact]
