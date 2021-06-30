@@ -15,8 +15,6 @@ Here is an image of the database diagram ![Image of DBDiagram](./SwivelAcademydb
 
 For, the API, I attached a screenshot here ![Image of API](./SwaggerAPIOverview1.PNG)
 
->you may find this video of the API at work on my local machine [here](https://youtu.be/5fwBbS7_Zd0)
-
 Here is a shared screen from the project web ![Image of API](./TeacherProfilePage.PNG)
 
 Screen where student select course to register for
