@@ -63,12 +63,6 @@
         });
     })
 
-
-
-
-
-
-
     let table2 = $("#tbl-taughtCourses").DataTable();
     $.ajax({
         type: "GET",
