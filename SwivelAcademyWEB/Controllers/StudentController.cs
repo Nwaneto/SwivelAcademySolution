@@ -43,7 +43,31 @@ namespace SwivelAcademyWEB.Controllers
         }
         public IActionResult ViewProfile()
         {
-            return View();
+            return View(); 
         }
+        public async Task<string> GetRegisteredCourses()
+        {
+            string url = _configuration.GetValue<string>("Endpoints:GetRegCourses");
+            int userId = _configuration.GetValue<int>("AppData:UserId");
+
+            var data = await _sRepo.GetRegisteredCourses(url, userId);
+
+            return data;
+        }
+
+        public async Task<string> GetAllCourses()
+        {
+            string url = _configuration.GetValue<string>("Endpoints:GetAllCourses");
+            int userId = _configuration.GetValue<int>("AppData:UserId");
+
+            var data = await _sRepo.GetAllCourses(url);
+
+            return data;
+        }
+
+        //public async Task<bool> RegisterForCourse(int Job_Id, int UserId)
+        //{
+
+        //}
     }
 }
