@@ -10,7 +10,6 @@ namespace SwivelAcademyAPI.Models
         public int CourseId { get; set; }
         public string CourseName { get; set; }
         public string CourseSyllabus { get; set; }
-        public string PassingGrade { get; set; }
 
     }
 }

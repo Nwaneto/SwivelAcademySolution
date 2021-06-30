@@ -54,7 +54,7 @@
             <param name="studentId"></param>
             <returns>A List of Courses</returns>
         </member>
-        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.CreateCourse(SwivelAcademyAPI.Models.DTOs.CourseModelDto)">
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.CreateCourse(SwivelAcademyAPI.Models.CourseModel)">
             <summary>
             End point to create a Course
             </summary>
@@ -90,7 +90,7 @@
             <param name="courseId"></param>
             <returns>Successfully deleted</returns>
         </member>
-        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.AddTeacher(SwivelAcademyAPI.Models.TeacherModelDto)">
+        <member name="M:SwivelAcademyAPI.Controllers.TeacherController.AddTeacher(SwivelAcademyAPI.Models.TeacherModel)">
             <summary>
             End point to Create a Teacher record
             </summary>

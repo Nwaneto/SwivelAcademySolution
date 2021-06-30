@@ -3,6 +3,7 @@ using SwivelAcademyAPI.Models.DTOs;
 using SwivelAcademyAPI.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,11 +11,12 @@ namespace SwivelAcademyAPI.Test
 {
     class TRepositoryTest : ITRepository
     {
-        private readonly List<TeacherModel> _sDto;
+        private readonly List<TeacherModel> _tDto;
+        private readonly List<CourseModel> _cDto;
 
         public TRepositoryTest()
         {
-            _sDto = new List<TeacherModel>()
+            _tDto = new List<TeacherModel>()
             {
                 new TeacherModel() {
                     TeacherId = 3,
@@ -38,31 +40,55 @@ namespace SwivelAcademyAPI.Test
                     Gender = "Female"
                 }
             };
+            _cDto = new List<CourseModel>() 
+            {
+                new CourseModel() {
+                    CourseId = 10,
+                    CourseName = "History",
+                    CourseSyllabus = "Lorem Ipsum"
+                },
+                new CourseModel() {
+                    CourseId = 11,
+                    CourseName = "Geography",
+                    CourseSyllabus = "Lorem Ipsum"
+                },
+                new CourseModel() {
+                    CourseId = 12,
+                    CourseName = "Anatomy",
+                    CourseSyllabus = "Lorem Ipsum"
+                }
+            };
         }
 
-        public string AddTeacher(TeacherModelDto teacherObj)
+        public string AddTeacher(TeacherModel teacherObj)
         {
-            throw new NotImplementedException();
+            _tDto.Add(teacherObj);
+            return "Successfull";
         }
 
-        public string CreateCourse(CourseModelDto courseObj)
+        public string CreateCourse(CourseModel courseObj)
         {
-            throw new NotImplementedException();
+            _cDto.Add(courseObj);
+            return "Successfull";
         }
 
         public string DeleteCourse(int courseId)
         {
-            throw new NotImplementedException();
+            var existing = _cDto.First(a => a.CourseId == courseId);
+            _cDto.Remove(existing);
+            return "Successful";
         }
 
         public string DeleteTeacher(int teacherId)
         {
-            throw new NotImplementedException();
+            var existing = _tDto.First(a => a.TeacherId == teacherId);
+            _tDto.Remove(existing);
+            return "Successful";
         }
 
-        public Task<IEnumerable<CourseModel>> GetAllCourses()
+        public async Task<IEnumerable<CourseModel>> GetAllCourses()
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(_cDto);
         }
 
         public Task<List<TaughtCourses>> GetAllTaughtCoursesByTeacher(int teacherId)
@@ -70,19 +96,19 @@ namespace SwivelAcademyAPI.Test
             throw new NotImplementedException();
         }
 
-        public Task<List<TeacherModel>> GetAllTeachers()
+        public async Task<List<TeacherModel>> GetAllTeachers()
         {
-            throw new NotImplementedException();
+            return await Task.FromResult(_tDto);
         }
 
         public CourseModel GetCourseByCourseId(int courseId)
         {
-            throw new NotImplementedException();
+            return _cDto.Where(a => a.CourseId == courseId).FirstOrDefault();
         }
 
         public TeacherModel GetTeacherById(int teacherId)
         {
-            throw new NotImplementedException();
+            return _tDto.Where(a => a.TeacherId == teacherId).FirstOrDefault();
         }
 
         public string TeachCourse(TeachCourseModel teachCourse)

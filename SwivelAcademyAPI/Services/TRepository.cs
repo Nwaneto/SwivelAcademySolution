@@ -17,7 +17,7 @@ namespace SwivelAcademyAPI.Services
         {
             _connString = configuration.GetConnectionString("SwivelAcademyConnString");
         }
-        public string AddTeacher(TeacherModelDto teacherObj)
+        public string AddTeacher(TeacherModel teacherObj)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace SwivelAcademyAPI.Services
             }
         }
 
-        public string CreateCourse(CourseModelDto courseObj)
+        public string CreateCourse(CourseModel courseObj)
         {
             try
             {

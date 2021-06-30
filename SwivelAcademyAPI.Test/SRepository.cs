@@ -50,7 +50,6 @@ namespace SwivelAcademyAPI.Test
 
         public string CreateStudent(StudentModel studentObj)
         {
-            //studentObj.StudentId = 3;
             _sDto.Add(studentObj);
             return "Successfull";
         }

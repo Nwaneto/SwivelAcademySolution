@@ -21,8 +21,7 @@ namespace SwivelAcademyAPI.Controllers
     {
         private readonly ITRepository _tRepository;
 
-        public TeacherController(ITRepository tRepository,
-            IMapper mapper, IWebHostEnvironment environment, IHttpContextAccessor httpConAccessor)
+        public TeacherController(ITRepository tRepository)
         {
             _tRepository = tRepository;
         }
@@ -40,7 +39,7 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CreateCourse(CourseModelDto cModel)
+        public IActionResult CreateCourse(CourseModel cModel)
         {
             if (!ModelState.IsValid)
             {
@@ -100,7 +99,7 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesResponseType(200, Type = typeof(CourseModel))]
         [ProducesResponseType(404)]
         [ProducesDefaultResponseType]
-        public IActionResult GetCourseById(int courseId)
+        public ActionResult<CourseModel> GetCourseById(int courseId)
         {
             var courseObj = _tRepository.GetCourseByCourseId(courseId);
             if (courseObj == null)
@@ -147,12 +146,16 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesDefaultResponseType]
         public IActionResult DeleteCourseById(int courseId)
         {
-            var courseObj = _tRepository.DeleteCourse(courseId);
+            var courseObj = _tRepository.GetCourseByCourseId(courseId);
             if (courseObj == null)
             {
                 return NotFound();
             }
-            return Ok(courseObj);
+            else
+            {
+                var result = _tRepository.DeleteCourse(courseId);
+                return Ok(result);
+            }
         }
 
         #endregion End point to Get a Course by courseId
@@ -171,15 +174,15 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult AddTeacher(TeacherModelDto tModel)
+        public IActionResult AddTeacher(TeacherModel tModel)
         {
-            if (tModel == null)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var teacherObj = _mapper.Map<TeacherModelDto>(tModel);
+            //var teacherObj = _mapper.Map<TeacherModelDto>(tModel);
 
-            if (_tRepository.AddTeacher(teacherObj) == "Successfully Created")
+            if (_tRepository.AddTeacher(tModel) == "Successfully Created")
             {
                 return Created("api/v{version:apiVersion}/Teacher/AddTeacher", "Successful");
             }
@@ -230,7 +233,7 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesResponseType(200, Type = typeof(TeacherModel))]
         [ProducesResponseType(404)]
         [ProducesDefaultResponseType]
-        public IActionResult GetTeacherById(int teacherId)
+        public ActionResult<TeacherModel> GetTeacherById(int teacherId)
         {
             var teacherObj = _tRepository.GetTeacherById(teacherId);
             if (teacherObj == null)
@@ -277,12 +280,16 @@ namespace SwivelAcademyAPI.Controllers
         [ProducesDefaultResponseType]
         public IActionResult DeleteTeacherById(int teacherId)
         {
-            var result = _tRepository.DeleteTeacher(teacherId);
-            if (result == null)
+            var teacherObj = _tRepository.GetTeacherById(teacherId);
+            if (teacherObj == null)
             {
                 return NotFound();
             }
-            return Ok(result);
+            else
+            {
+                var result = _tRepository.DeleteTeacher(teacherId);
+                return Ok(result);
+            }
         }
 
         #endregion End point to Delete a Teacher Record
