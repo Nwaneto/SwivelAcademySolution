@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using SwivelAcademyWEB.Models;
 using SwivelAcademyWEB.Services;
 using System;
 using System.Collections.Generic;
@@ -26,10 +27,6 @@ namespace SwivelAcademyWEB.Controllers
             return View();
         }
         public IActionResult Dashboard()
-        {
-            return View();
-        }
-        public IActionResult RegisterForCourse()
         {
             return View();
         }
@@ -65,9 +62,19 @@ namespace SwivelAcademyWEB.Controllers
             return data;
         }
 
-        //public async Task<bool> RegisterForCourse(int Job_Id, int UserId)
-        //{
-
-        //}
+        public async Task<bool> RegisterForCourse(RegCourseModel model)
+        {
+            string url = _configuration.GetValue<string>("Endpoints:RegisterForACourse");
+            
+            var data = await _sRepo.RegisterForCourse(url, model);
+            if (data == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

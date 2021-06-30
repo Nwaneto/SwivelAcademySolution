@@ -44,10 +44,7 @@ namespace SwivelAcademyWEB.Controllers
             //
             return View();
         }
-        public IActionResult TeachCourse()
-        {
-            return View();
-        }
+        
         public IActionResult ViewProfile()
         {
             return View();
@@ -55,6 +52,43 @@ namespace SwivelAcademyWEB.Controllers
         public IActionResult ViewMyCourses()
         {
             return View();
+        }
+
+        public async Task<string> GetTaughtCourses()
+        {
+            string url = _configuration.GetValue<string>("Endpoints:GetTaughtCourses");
+            int teacherId = _configuration.GetValue<int>("AppData:TeacherId");
+
+            var data = await _tRepo.GetTaughtCourses(url, teacherId);
+
+            return data;
+        }
+
+        public async Task<bool> TeachCourse(TeachCourseModel model)
+        {
+            string url = _configuration.GetValue<string>("Endpoints:TeachCourse");
+            //Teacher Id should come from claims
+            int teacherId = _configuration.GetValue<int>("AppData:TeacherId");
+            model.TeacherID = teacherId;
+            var data = await _tRepo.TeachCourse(url, model);
+            if (data == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<string> GetAllCourses()
+        {
+            string url = _configuration.GetValue<string>("Endpoints:GetAllCourses");
+            int userId = _configuration.GetValue<int>("AppData:TeacherId");
+
+            var data = await _tRepo.GetAllCourses(url);
+
+            return data;
         }
     }
 }

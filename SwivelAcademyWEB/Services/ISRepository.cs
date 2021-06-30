@@ -11,5 +11,6 @@ namespace SwivelAcademyWEB.Services
         
         public Task<string> GetRegisteredCourses(string url, int userId);
         public Task<string> GetAllCourses(string url);
+        public Task<bool> RegisterForCourse(string url, RegCourseModel reg);
     }
 }

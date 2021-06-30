@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using SwivelAcademyWEB.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SwivelAcademyWEB.Services
@@ -63,6 +65,35 @@ namespace SwivelAcademyWEB.Services
             {
                 ex.Message.ToString();
                 return "Error encountered";
+            }
+        }
+
+        public async Task<bool> RegisterForCourse(string url, RegCourseModel reg)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    StringContent content = new StringContent(JsonConvert.SerializeObject(reg), Encoding.UTF8, "application/json");
+                    using (var response = await httpClient.PostAsync(url, content))
+                    {
+                        var apiResponse = await response.Content.ReadAsStringAsync();
+                        if (apiResponse == "Successful")
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Message.ToString();
+                //_logger.LogError(ex, ex.Message);
+                return false;
             }
         }
     }
